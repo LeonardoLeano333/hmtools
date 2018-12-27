@@ -1,13 +1,15 @@
-###################################################################################################
-###date 08/02/18
-###################################################################################################
-### change lsm to lsm
+#########################################
+###date 13/10/18
+###It is going to be up to date at:
+###< https://github.com/LeonardoLeano333 >
+#########################################
+### change lsm to lsm_
 
 import numpy as np
 
-###############################################################################
+#####################################
 ###weighted average 
-###############################################################################
+#####################################
 #it is not that important
 def w_average(x,sx):
 #parameters
@@ -20,9 +22,9 @@ def w_average(x,sx):
     w_avg   = np.dot(x,p)/sum(p)
     return w_avg
 
-###############################################################################
+#####################################
 ###weighted average deviation
-###############################################################################
+#####################################
 #it is not that important
 def s_w_average(sx):
     lx=len(sx)
@@ -30,9 +32,9 @@ def s_w_average(sx):
     s_w_avg = np.sqrt(1/(sum(p)))
     return s_w_avg
 
-###############################################################################
+#####################################
 ###chi-square calculated by data and estimated data y
-###############################################################################
+#####################################
 #it is not that important
 def chi2_calculator(data,sdata,y):
 #data = np.array
@@ -42,9 +44,9 @@ def chi2_calculator(data,sdata,y):
     chi2  = sum(delta**2)
     return chi2
 
-###############################################################################
+#####################################
 ###slope fit by least square method
-###############################################################################
+#####################################
 def lsm_slope_fit(x,y,sy=[0]):
 #problem definition: y = ax
 #parameters
@@ -88,9 +90,9 @@ def lsm_slope_fit(x,y,sy=[0]):
 # ii you dont know the deviation of the data you have to do it recursively in order to estimate it
 
 
-###############################################################################
+#####################################
 ###linear fit by least square method
-###############################################################################
+#####################################
 def lsm_linear_fit(x,y,sy=[0]):
 #problem definition: y = ax +b
 #parameters
@@ -165,9 +167,9 @@ def lsm_linear_fit(x,y,sy=[0]):
 #A,cov_matrix,sy_estimate = lsm_linear_fit(x,y)
 
 
-###############################################################################
+#####################################
 ###exponential decai parameter estimator
-###############################################################################
+#####################################
 ###SSS Verificar aqui : tem uma redundancia na rotina SSS###
 ### Acho que esse nao leva em conta a correcao de gauss
 #DESCRIPTION: this method use a mapping in the parameter p for the first guess in p, and make an correction with the gauss method.
@@ -236,7 +238,7 @@ def exponential_decai_p_estimator(tt,yy,sy,pp,n_gauss=0):
     cov_matrix = np.linalg.inv(planning_matrix)
     
     return [p,I0,BG],QQ,cov_matrix,chi2_refined
-###############################################################################
+#####################################
 #example:
 #import matplotlib.pyplot as plt
 #tt = np.arange(0,60)
@@ -259,11 +261,11 @@ def exponential_decai_p_estimator(tt,yy,sy,pp,n_gauss=0):
 #plt.figure(2)
 #plt.errorbar(tt,residue,yerr=sy,marker='o',linestyle=' ')
 #plt.show()
-###############################################################################
+#####################################
 
-###############################################################################
+#####################################
 ### least square method 3 parameter estimator
-###############################################################################
+#####################################
 ###SSS Verifica aqui SSS###
 ### mudar de nome essa funcao para ingles; 
 ### Lembrar que ela esta sendo usada no outro metodo
@@ -322,7 +324,7 @@ def lsm_linear_fit_3d(yy,sy,xx1,xx2):
     
     
     return a,cov_matrix,chi2
-###############################################################################
+#####################################
 #example:
 #import matplotlib.pyplot as plt
 #tt = np.arange(0,60)
@@ -359,12 +361,12 @@ def lsm_linear_fit_3d(yy,sy,xx1,xx2):
 #plt.figure(2)
 #plt.errorbar(tt,residue,yerr=sy,marker='o',linestyle=' ')
 #plt.plot([0,60],[0,0],color='k')
-###############################################################################
+#####################################
 
 
-###################################################################################################
+#########################################
 ### double exponential decai parameter estimator
-###################################################################################################
+#########################################
 #DESCRITION:
 #
 #
@@ -434,7 +436,7 @@ def double_exponential_decai_p_estimator(tt,yy,sy,pp1,pp2,n_gauss=0):
     print('\n\n\n')
     return [BG,I01,I02,p1,p2],cov_matrix,chi2,residue,QQ
 #example:
-###################################################################################################
+#########################################
 #import matplotlib.pyplot as plt
 #tt = np.arange(0,60)
 #p1 = 0.2
@@ -477,9 +479,9 @@ def double_exponential_decai_p_estimator(tt,yy,sy,pp1,pp2,n_gauss=0):
 #ax.plot_wireframe(X, Y, Z, rstride=10, cstride=10)
 #plt.show()
 
-###################################################################################################
+#########################################
 ###derivate with precision
-###################################################################################################
+#########################################
 def derivate(func,par,x,dx):
 #func= model function
 #par = function parameters
@@ -488,29 +490,172 @@ def derivate(func,par,x,dx):
     df = (func(par,x+dx)-func(par,x-dx))/(2*dx)
     return df
 
-###################################################################################################
-###General Two Nonlinear Parameter Estimator - Mapping & Gauss
-###################################################################################################
-def one_nonlinear_parameter_estimator(func,tt,yy,sy,pp,n_gauss=0):
-#data model:
-#yy = A0*func(p,xx)+B0
-#entries:
-#tt = numpy array
-#yy = numpy array, same length tt
-#sy = numpy array, same length tt
-#pp = numpy array, tries this p values(nonlinear parameter)  
-#n_gauss = int, iterate gauss method n_gauss times
-#return:
-    pass
-    return
 
 
-###################################################################################################
-###################################################################################################
-###################################################################################################
-#comentar daqui para baixo
-###################################################################################################
-###################################################################################################
-###################################################################################################
+### COMENT
+#########################################
+###derivate in parameter with precision dpar is a vector to derivate
+#########################################
+def derivate_in_par(func,x,par,dpar):
+#func= model function
+#par = function parameters
+#x   = derivate point 
+#dx  = precision
+    df = (func(x,par+dpar)-func(x,par-dpar))/(2*np.linalg.norm(dpar))
+    return df
+#####example:
+##def decay_stretching(x,par):
+##    #model
+##    #x =  np.array(dtype=int or float)
+##    #I0
+##    p = par[0]
+##    b= par[1]
+##    y = np.power(np.exp(-p*x),b)
+##    y = np.array(y)
+##    return y
+##
+##
+##par = np.array([1,1])
+##x = np.arange(0,121)
+##y = decay_stretching(x,par)
+##
+##plt.plot(x,y)
+##plt.show()
+##
+##dpar = np.array([0,0,0.0001])
+##
+##dy = derivate_in_par(decay_stretching,x,par,dpar)
+##
+##plt.plot(x,dy)
+##plt.show()
+##############################
 
+##############################
+###exponential decay stretching
+##############################
+def decay_stretching(x,par):
+    #model
+    #x =  np.array(dtype=int or float)
+    #I0
+    p = par[0]
+    b= par[1]
+    y = np.exp(   - np.power((p*x),b) )
+    y = np.array(y)
+    return y
+##############################
+
+##############################
+###General Two Nonlinear Parameter Estimator - Mapping & Gauss ###
+##############################
+def two_coupled_nonlinear_parameter_estimator(func,xx,yy,sy,pp1,pp2,delta,n_gauss=0):
+#func = decay_stretching
+#delta= 0.0001
+#ll=1000
+#pp1=np.array([i/ll for i in range(1,ll)])
+#pp2=np.array([i/ll for i in range(1,ll)])
+#xx = xx
+#yy = yy
+#sy = sy
+    par =[0,0]
+    
+    
+    QQ = np.zeros([len(pp1),len(pp2)])
+    for iter_1 in range(len(pp1)):
+        for iter_2 in range(len(pp2)):
+            par[0] = pp1[iter_1]
+            par[1] = pp2[iter_2] 
+            xx1 = func(xx,par)
+            A,cov_matrix,_=lsm_linear_fit(xx1,yy,sy)
+            #plt.plot(xx,xx1)
+            ff = A[0]*xx1+A[1]
+            QQ[iter_1][iter_2]=chi2_calculator(yy,sy,ff)
+            
+    best = np.unravel_index(QQ.argmin(),QQ.shape)
+    
+    p1 = pp1[best[0]]
+    p2 = pp2[best[1]]
+    par = [p1,p2]
+    xx1 = decay_stretching(xx,par)
+    A,cov_matrix,_=lsm_linear_fit(xx1,yy,sy)
+    ff = A[0]*xx1+A[1]
+    chi2_min = chi2_calculator(yy,sy,ff)
+    par_nonlinear_estimated = np.array([p1,p2])
+    ### preciso agora fazer a tiracao das propriedades
+    ### straction of properties
+    x_matrix = np.array([[ A[0]*derivate_in_par(func,xx[i],par_nonlinear_estimated,[delta,0]),\
+                  A[0]*derivate_in_par(func,xx[i],par_nonlinear_estimated,[0,delta]),\
+                  func(xx[i],par_nonlinear_estimated),\
+                  1]for i in range(len(xx))])
+    V = (sy*sy)*np.eye(len(sy))
+    inverse_V = np.linalg.pinv(V)
+    planning_matrix = np.dot(x_matrix.T,np.dot(inverse_V,x_matrix))
+    cov_matrix = np.linalg.pinv(planning_matrix)
+
+    par_estimated = [p1,p2,A[0],A[1]]
+    residue = ( yy -( A[0]*func(xx,par)+A[1]) )
+    
+    return par_estimated,cov_matrix,chi2_min,residue,QQ
+#######################
+####example:
+##I0 = 1000
+##p=0.555
+##b=0.455
+##F = 45
+##par = np.array([p,b])
+##
+##xx = np.arange(0,121)
+##sy = np.sqrt(I0*decay_stretching(xx,par) + F)
+##yy = np.array([I0*decay_stretching(xx[i],par) + F + np.random.normal(0,sy[i]) for i in range(len(xx))])
+##
+##
+##func = decay_stretching
+##delta= 0.0001
+##ll=100
+##pp1=np.array([i/ll for i in range(1,ll)])
+##pp2=np.array([i/ll for i in range(1,ll)])
+##
+##par_estimated,cov_matrix,chi2_min,residue,QQ = two_coupled_nonlinear_parameter_estimator(func,xx,yy,sy,pp1,pp2,delta,n_gauss=0)
+##
+##
+##plt.figure(1)
+##par = [par_estimated[0],par_estimated[1]]
+##A = [par_estimated[2],par_estimated[3]]
+##plt.plot(xx,yy,label='dados',color='b')
+##plt.plot(xx,A[0]*decay_stretching(xx,par)+A[1],label='fit',color='r')
+##plt.xlabel('tempo(s)')
+##plt.ylabel('sinal OSL(C/s)')
+##plt.show()
+##
+##
+##plt.figure(2)
+##plt.plot(residue/sy)
+##plt.show()
+###contour plot
+##
+##plt.figure(3)
+##x = pp1
+##y = pp2
+##X, Y = np.meshgrid(x, y)
+##Z = QQ
+##Z_min = np.min(QQ)
+##V = np.array([Z_min+i**2 for i in range(10)])
+##
+##
+##p1 = par_estimated[0]
+##p2 = par_estimated[1]
+##sp1 = np.sqrt(cov_matrix[0][0])
+##sp2 = np.sqrt(cov_matrix[1][1])
+##plt.figure(4)
+##CS = plt.contour(X, Y, Z, V)
+##plt.clabel(CS, inline=1, fontsize=10)
+##plt.plot([p2],[p1],label='Min chisquare'+str(int(Z_min)),marker='o'\
+##,linestyle=' ',color='r',markersize=3)
+##plt.xlabel('$B$')    
+##plt.ylabel('$p(s^{-1})$')    
+##plt.xlim(p2-3*sp2,p2+3*sp2)
+##plt.ylim(p1-3*sp1,p1+3*sp1)
+##
+##plt.legend(loc='best')
+##plt.show()
+#######################
 
