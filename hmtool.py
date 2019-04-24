@@ -417,11 +417,11 @@ def double_exponential_decai_p_estimator(tt,yy,sy,pp1,pp2,n_gauss=0):
     residue = numpy array, vector to plot the residues
     QQ = 2D numpy array, length(pp1) X length(pp2), to plot 3D the guessed region
 
-    #example:
+   ###example:
     #########################################
     import matplotlib.pyplot as plt
     tt = np.arange(0,60)
-    p1 = 0.2
+    p1 = 0.3
     I10 = 1000
     p2 = 0.1
     I20 = 200
@@ -441,27 +441,44 @@ def double_exponential_decai_p_estimator(tt,yy,sy,pp1,pp2,n_gauss=0):
     print(chi2)
     
     plt.figure(1)
-    plt.errorbar(tt,yy,yerr=sy,marker='o',linestyle=' ')
-    plt.plot(tt,a[0]+a[1]*np.exp(-p1*tt)+ a[2]*np.exp(-p2*tt))      
+    plt.title('random data and fit')
+    plt.errorbar(tt,yy,yerr=sy,marker='o',linestyle=' ',label='random data',color='b')
+    plt.plot(tt,a[0]+a[1]*np.exp(-p1*tt)+ a[2]*np.exp(-p2*tt),label='fit',color='r')      
+    plt.legend()
     
     plt.figure(2)
+    plt.title('residue')
     plt.errorbar(tt,residue,yerr=sy,marker='o',linestyle=' ')
+    plt.plot([0,60],[0,0],color='k')
+    
+    
+    plt.figure(2)
+    plt.title('reduced residue')
+    plt.errorbar(tt,residue,yerr=sy,marker='o',linestyle=' ',color='blue')
     plt.plot([0,60],[0,0],color='k')
     
     from mpl_toolkits.mplot3d import axes3d
     
     fig = plt.figure(3)
-    ax = fig.add_subplot(111, projection='3d')
     
     X = pp1
     Y = pp2
     X, Y = np.meshgrid(X, Y)
     Z = np.array(QQ)
+    Z[Z>chi2_refined+3*np.sqrt(chi2_refined)] = chi2_refined+2*np.sqrt(chi2_refined)
+    V = np.array([chi2_refined+i*np.sqrt(chi2_refined) for i in range(0,10)])
     
-    ax.plot_wireframe(X, Y, Z, rstride=10, cstride=10)
+    cp = plt.contourf(X, Y, Z,cmap='jet')
+    cp.levels = [chi2_refined+i**2 for i in range(0,5)]
+    plt.colorbar(cp)
+    plt.title('Contours Plot')
+    plt.xlim(p1-3*np.sqrt(cov_matrix[3][3]),p1+3*np.sqrt(cov_matrix[3][3]))
+    plt.ylim(p2-3*np.sqrt(cov_matrix[4][4]),p2+3*np.sqrt(cov_matrix[4][4])) 
+    plt.xlabel('p1')
+    plt.ylabel('p2')
     plt.show()
-    
     #########################################
+
     
     '''
     QQ = np.zeros([len(pp1),len(pp2)])
