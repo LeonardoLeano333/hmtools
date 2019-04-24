@@ -30,4 +30,8 @@ installing the dependencies and jupyter notebook
 
 `$ pip install jupyter`
 
-### for running examples in jupyter-notebook
+### For running examples in jupyter-notebook
+
+run the command in the diretory and open the notebook
+`$ jupyter notebook`
+
